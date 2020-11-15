@@ -1,4 +1,5 @@
 import {Schema, model} from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const usuarioSchema = new Schema({
     
@@ -14,12 +15,10 @@ const usuarioSchema = new Schema({
         type:String,
         required:true
     },
-    roles:[
-        {
-            type:Schema.Types.ObjectId,
-            ref:'Role'
-        },
-    ],
+    roles:[{
+            ref:"Role",
+            type: Schema.Types.ObjectId  
+        }],
 },
 {
     timestamps:true,
@@ -27,4 +26,15 @@ const usuarioSchema = new Schema({
 }
 );
 
-export default model('Usuario', usuarioSchema)
+//metodo para cifrar a senha
+usuarioSchema.statics.encryptPassword = async (password) =>{
+    const salt  = await  bcrypt.genSalt(10)
+    return await bcrypt.hash(password, salt);
+}
+
+//metodo para comparar
+usuarioSchema.statics.comparePassword = async (password, receivedPassword) =>{
+    return await bcrypt.compare(password, receivedPassword);
+}
+
+export default model("Usuario", usuarioSchema);

@@ -1,8 +1,10 @@
 import {Schema, model} from 'mongoose';
 
+
+
 const roleSchema = new Schema(
     {
-    name:String
+    name:String,
 },
     {
     versionKey:true
@@ -10,4 +12,4 @@ const roleSchema = new Schema(
 
 );
 
-export default model('Role', roleSchema);
+export default model("Role", roleSchema);
